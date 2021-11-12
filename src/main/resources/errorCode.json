@@ -1,0 +1,14 @@
+[
+	{
+		"id":"404",
+		"code":"Not Found",
+		"reason":"",
+		"info":"페이지를 찾을 수 없습니다."
+	},
+	{
+		"id":"403",
+		"code":"Forbidden",
+		"reason":"",
+		"info":"잘못된 접근입니다."
+	}
+]

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+        https://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context
+	  	https://www.springframework.org/schema/context/spring-context.xsd">
+        
+    <!--
+	bean 설정에서 받아오는 경로에 파일이름의 앞 경로와
+	뒤에 붙는 .jsp를 자동으로 붙여주는 설정
+	-->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/view/"></property>
+		<property name="suffix" value=".jsp"></property>
+		<property name="order" value="2"></property>
+	<!-- 읽어들이는 우선순위를 설정 order -->
+	</bean>
+	
+	<bean class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView"></property>
+		<property name="order" value="1"></property>
+	</bean>
+	
+	<bean class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+		<property name="definitions" value="/WEB-INF/tiles.xml"></property>
+	</bean>
+	<!-- tiles.xml과 연결하는 역할 -->
+	
+	<!-- multipart와 연결하여 받아오는 파일 용량을 300Mb로 제한하는 설정 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="314572800"></property>
+	<!-- value값은 byte값이고 이는 300*1024*1024로 300Mb를 뜻한다. -->
+	</bean>
+	
+	<context:component-scan base-package="com.storebro.web" />
+	<!-- 컨트롤러의 최상위 패키지의 경로를 설정하여 자동으로 패키지를 찾는다. -->
+
+    <mvc:resources location="/resources/" mapping="/resources/**" />
+
+    <mvc:annotation-driven>
+		<mvc:message-converters><!-- @ResponseBody로 String 처리할때 한글처리 -->
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>text/html;charset=UTF-8</value>
+	<!-- multipart할때 request되는 내용을 한글 깨지지 않게 설정하는 것 -->
+					</list>
+				</property>		
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+</beans>

@@ -1,0 +1,87 @@
+/**
+ *
+ * @project : storebro
+ * @author : k.n Kim, k.l Kim
+ * @description : 항상 작업 한 부분에는 각자 네임 ex) >> kn 주석 및 날짜표기 필수
+ * @todo : 항상 메인에는 전체페이지에 공통되는 부분만 표기할 것, 부분적 or 하나라도 해당 안되면 파일 새로 만들어서 할 것.
+ * @since : 2021-07-29
+ *
+ */
+
+'use strict';
+
+function sumCapitalize(string, command){
+	// 텍스트 앞글자 대문자 변환
+    let tmp="";
+    if(typeof string != 'object'){
+    string = string.split(/[\s\-\.]/gi);
+    }
+    for(let s of string){
+        if(s==string[0] && command=="notFirst"){
+            tmp += s;
+        } else {
+            tmp += s.charAt(0).toUpperCase()+s.slice(1);
+        }
+    }
+    return tmp.replace(/all/gi,'');
+}
+
+function getAttrToArray(node,attr, spliteType){
+    let arr = node.getAttribute(attr).split(spliteType);
+    return arr;
+}
+
+// datagroup에 따른 items 정보 설정
+//window.addEventListener('load',(event)=>{
+//    let a = document.querySelectorAll('[data-group]');
+//    for(var i=0; i<a.length; i++){
+//        // vars
+//        let dataList = getAttrToArray(a[i],'data-group', " ");
+//        let imgSrc = a[i].children[0].children[0];
+//        let outputList = a[i].children[0].children[1].children;
+//        
+//        imgSrc.setAttribute("src", "./"+sumCapitalize(dataList, 'notFirst')+".png");
+//        imgSrc.setAttribute("alt", sumCapitalize(dataList, 'notFirst'));
+//        for(var q=0; q<2; q++) outputList[q].innerHTML = dataList[q];
+//    }
+//});
+
+// # data-target = * Menu 한정 작동되는 기능
+let sorting = document.querySelectorAll('[data-target]');
+for(let arr of sorting){
+    for(let child of arr.children){
+        child.addEventListener('click',(event)=>{
+            // add selected func
+            let clickType = event.target.getAttribute('data-value'); // 클릭시 타입 값
+            // console.log(clickType);
+            let target = document.querySelector(arr.getAttribute('data-target')); // 타겟
+            let childs = target.children;
+            for(var i=0; i<childs.length; i++){
+				let tmp = childs[i];
+                childs[i].getAttribute("data-group").indexOf(clickType)==-1?
+                (childs[i].setAttribute("data-show", "hide"),
+                childs[i].style.display="none"):
+                (childs[i].setAttribute("data-show", "show"),
+                childs[i].style.display="block");
+            }
+            selecting(event);
+        });
+    }
+}
+
+// when click set tag attr as selected
+function selecting(event){
+    let target = event.target;
+    if(!target.getAttribute("id")){ // 다른부분 클릭실행 방지
+        let childs = event.path[1].children;
+        // 모든 버튼 selected 클래스 초기화
+        for(var i=0; i<childs.length; i++){
+            let cc = childs[i].getAttribute("class").replace(/(\sselected)/gi,''); // selected를 찾아서 지운다
+            childs[i].setAttribute("class", cc);
+        }
+        // 클릭된 타겟 selected 주기
+        if(target.getAttribute("data-value").indexOf("all")==-1){
+            target.setAttribute("class", target.getAttribute("class") + " selected");
+        }
+    }
+}

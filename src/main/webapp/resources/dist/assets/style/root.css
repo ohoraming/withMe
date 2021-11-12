@@ -1,0 +1,14 @@
+@charset "UTF-8";
+
+:root{
+	--color-main: rgba(212, 129, 102, 1.0);
+	--color-sub-light: rgba(230, 226, 221, 1.0);
+	--color-sub-dark: rgba(55, 58, 54, 1.0);
+	--color-white: white;
+}
+
+@font-face{
+	font-family: bro;
+	src: url(/resources/dist/assets/lib/font/Heaters.otf); 
+/* 	url(/resources/dist/assets/lib/font/BoardingPersonalUse.ttf); */
+}

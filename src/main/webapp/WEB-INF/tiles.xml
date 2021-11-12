@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+
+  <definition name="root.*" template="/WEB-INF/views/inc/layout.jsp">
+    <put-attribute name="title" value="Store Bro" />
+    <put-attribute name="header" value="/WEB-INF/views/inc/header.jsp" />
+    <put-attribute name="body" value="/WEB-INF/views/{1}.jsp" />
+    <put-attribute name="userbar" value="/WEB-INF/views/inc/userbar.jsp" />
+    <put-attribute name="footer" value="/WEB-INF/views/inc/footer.jsp" />
+  </definition>
+  
+  <definition name="board.*" template="/WEB-INF/views/board/inc/layout.jsp">
+    <put-attribute name="title" value="Store Bro" />
+    <put-attribute name="header" value="/WEB-INF/views/inc/header.jsp" />
+    <put-attribute name="sidebar" value="/WEB-INF/views/board/inc/sidebar.jsp" />
+    <put-attribute name="body" value="/WEB-INF/views/board/{1}.jsp" />
+    <put-attribute name="userbar" value="/WEB-INF/views/inc/userbar.jsp" />
+    <put-attribute name="footer" value="/WEB-INF/views/inc/footer.jsp" />
+  </definition>
+
+  <definition name="error.*" template="/WEB-INF/views/inc/layout.jsp">
+    <put-attribute name="title" value="Store Bro" />
+    <put-attribute name="header" value="/WEB-INF/views/inc/header.jsp" />
+    <put-attribute name="body" value="/WEB-INF/views/error/{1}.jsp" />
+    <put-attribute name="userbar" value="/WEB-INF/views/inc/userbar.jsp" />
+    <put-attribute name="footer" value="/WEB-INF/views/inc/footer.jsp" />
+  </definition>
+  
+</tiles-definitions>

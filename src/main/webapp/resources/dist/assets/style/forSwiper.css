@@ -1,0 +1,29 @@
+/**
+ *
+ * @project : storebro
+ * @author : k.n Kim, k.l Kim
+ * @description : 항상 작업 한 부분에는 각자 네임 ex) >> kn 주석 및 날짜표기 필수
+ * @todo : 항상 메인에는 전체페이지에 공통되는 부분만 표기할 것, 부분적 or 하나라도 해당 안되면 파일 새로 만들어서 할 것.
+ * @since : 2021-07-29
+ *
+ */
+
+@charset "UTF-8";
+@import url("/resources/dist/assets/style/root.css");
+
+
+@media screen and (max-width: 991px){
+	.swiper-container {
+	  width: 100% !important;
+	  height: 360px;
+	}
+}
+
+.swiper-container {
+	  width: 100%;
+	  height: 360px;
+	}
+
+.swiper-button-prev,.swiper-button-next{
+	color: var(--color-sub-dark) !important;
+}

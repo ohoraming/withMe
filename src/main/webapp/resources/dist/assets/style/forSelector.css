@@ -1,0 +1,84 @@
+/**
+ *
+ * @project : storebro
+ * @author : k.n Kim, k.l Kim
+ * @description : 항상 작업 한 부분에는 각자 네임 ex) >> kn 주석 및 날짜표기 필수
+ * @todo : 항상 메인에는 전체페이지에 공통되는 부분만 표기할 것, 부분적 or 하나라도 해당 안되면 파일 새로 만들어서 할 것.
+ * @since : 2021-07-29
+ *
+ */
+
+@charset "UTF-8";
+@import url("/resources/dist/assets/style/root.css");
+
+div>img{
+    width: 20rem;
+    height: auto;
+    filter: drop-shadow(0px 0px 5px black);
+}
+
+li{
+    list-style: none;
+/*     background-color: white;   */
+    overflow: hidden;
+}
+
+button>img,span>img{
+    width: 4rem;
+    height: 4rem;
+    filter: drop-shadow(0px 0px 2px yellow);
+}
+
+#btnGroup button:hover{
+    transform: scale(1.05) translateY(-20%);
+    box-shadow: 0 5px 3px -2px black;
+}
+#btnGroup button{
+    transition: 500ms ease;
+}
+
+.selected{
+    /* transform: scale(1.05) translateY(-20%); */
+    box-shadow: 0 5px 3px -2px black;
+    animation: bounding 1s ease infinite;
+}
+
+@keyframes bounding{
+    0%{
+        transform: scale(1.05) translateY(-5%) rotate(0deg);
+    }
+    25%{
+        transform: scale(1.05) translateY(-10%) rotate(2deg);
+    }
+    50%{
+        transform: scale(1.05) translateY(-5%) rotate(0deg);
+    }
+    75%{
+        transform: scale(1.05) translateY(-10%) rotate(-2deg);
+    }
+    100%{
+        transform: scale(1.05) translateY(-5%) rotate(0deg);
+    }
+}
+
+#firstMenu{
+	transition: .2s ease;
+}
+
+[data-group]{
+	box-sizing: border-box;
+	position: absolute;
+	padding: 1rem;
+	margin-bottom: 1rem;
+	border-radius: 15px;
+}
+
+.hide{
+    transition: 200ms ease;
+    opacity: 0;
+}
+
+.show{
+    transition: 300ms cubic-bezier(1, 0, 0, 1);
+    opacity: 1;
+}
