@@ -18,20 +18,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class HomeController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-	
 	@RequestMapping("")
-	public String home(Locale locale, Model model) {
-		logger.info("Welcome home! The client locale is {}.", locale);
-//		String a = null;
-//		try {
-//			if(a==null) 
-//				throw new NullPointerException();
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//		}
+	public String home() {
 		return "root.index";
 	}
+
+	@GetMapping("/nowadays")
+	public String nowadays() {
+		return "festival.nowadays";
+	}
+
+	@GetMapping("/region")
+	public String region() {
+		return "festival.region";
+	}
+	
+	@GetMapping("/monthly")
+	public String monthly() {
+		return "festival.monthly";
+	}
+	
+	@GetMapping("/season")
+	public String season() {
+		return "festival.season";
+	}
+	
 	
 	@GetMapping("error/notFound")
 	public String error() {

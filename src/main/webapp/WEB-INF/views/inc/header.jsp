@@ -1,50 +1,48 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%
-	String url = (String) request.getAttribute("javax.servlet.forward.request_uri");
-%>
-<nav id="gnb" class="navbar navbar-expand-xl fixed-top navbar-light w-100 zi-100">
-  <div class="container-fluid">
-    <a class="navbar-brand d-flex align-items-center" href="<%=url.equals("/")?"#":"/#" %>"><span class="text-capitalize ms-4 mb-0 h4 fw-bold">store bro</span></a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarColor01">
-      <ul class="navbar-nav ms-4 me-auto mb-2 mb-lg-0 text-uppercase fs-8">
-        <li class="nav-item">
-          <a class="nav-link" href="#">수입차용품</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">세차용품</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">실내용품</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">실외용품</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">안전/편의용품</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">DIY용품</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">튜닝/레이싱</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">휴대폰</a>
-        </li>
-      </ul>
-      <form class="d-flex" action="/search">
-        <input class="form-control me-4" type="search" name="text" placeholder="Search" aria-label="Search" required>
-        <button class="btn btn-outline-secondary" type="submit">Search</button>
-      </form>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<nav class="gnb position-sticky bg-light us-none gnb-primary">
+    <div class="gnb-inner gnb-expand-md hide align-items-center">
+        <div class="brand fw-bold">
+            <a href="/">WithMe</a>
+        </div>
+        <div class="menu-btn">
+            <button class="btn btn-light text-gray fs-4" data-target="#gnbMenu" style="line-height: 1">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <ul id="gnbMenu" class="gnb-menu gx-5 w-flex">
+            <li>
+                <a class="nav-link" href="#">축제 검색</a>
+            </li>
+            <li>
+                <a class="nav-link" href="#">날씨 검색</a>
+            </li>
+            <li>
+                <a class="btn btn-brand text-white" href="#">로그인</a>
+            </li>
+            <li class="search btn-bundle g-0">
+                <input type="text" class="form-input col">
+                <button class="btn btn-warning">
+                    <i class="fas fa-search"></i>
+                </button>
+            </li>
+        </ul>
     </div>
-  </div>
 </nav>
-
-<button class="btn position-fixed bg-white" style="width: 10rem; top:60px; right: 1%; z-index:50;" type="button" data-bs-toggle="offcanvas" data-bs-target="#userbar" aria-controls="userbar">
-	<i class="fas fa-users-cog"></i>
-	User Settings
-</button>
+<section class="bg-light" style="z-index: 1170;position: relative;">
+    <div class="w-flex justify-content-between g-3 p-1">
+        <div class="col-10 text-start">
+            <div class="btn text-dark btn-focus-gray pe-none" data-target="#lsb">
+                <i class="fas fa-bars"></i> 메뉴
+            </div>
+        </div>
+        <c:if test="${user}">
+	        <div class="col-10 text-end">
+	            <button class="btn text-dark btn-focus-gray" data-target="#rsb">
+	                <i class="fas fa-bars"></i> 회원정보
+	            </button>
+	        </div>
+        </c:if>
+    </div>
+</section>

@@ -4,29 +4,30 @@
        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 <tiles-definitions>
 
-  <definition name="root.*" template="/WEB-INF/views/inc/layout.jsp">
+  <definition name="baseResources" template="/WEB-INF/views/inc/layout.jsp">
     <put-attribute name="title" value="Store Bro" />
+    <put-attribute name="tracking-preload" value="/WEB-INF/views/inc/tracking-preload.jsp" />
+    <put-attribute name="tracking-head" value="/WEB-INF/views/inc/tracking-head.jsp" />
+    <put-attribute name="tracking-footer" value="/WEB-INF/views/inc/tracking-footer.jsp" />
     <put-attribute name="header" value="/WEB-INF/views/inc/header.jsp" />
-    <put-attribute name="body" value="/WEB-INF/views/{1}.jsp" />
-    <put-attribute name="userbar" value="/WEB-INF/views/inc/userbar.jsp" />
+    <put-attribute name="leftSideBar" value="/WEB-INF/views/inc/leftSideBar.jsp" />
+    <put-attribute name="rightSideBar" value="/WEB-INF/views/inc/rightSideBar.jsp" />
     <put-attribute name="footer" value="/WEB-INF/views/inc/footer.jsp" />
   </definition>
   
-  <definition name="board.*" template="/WEB-INF/views/board/inc/layout.jsp">
-    <put-attribute name="title" value="Store Bro" />
-    <put-attribute name="header" value="/WEB-INF/views/inc/header.jsp" />
-    <put-attribute name="sidebar" value="/WEB-INF/views/board/inc/sidebar.jsp" />
-    <put-attribute name="body" value="/WEB-INF/views/board/{1}.jsp" />
-    <put-attribute name="userbar" value="/WEB-INF/views/inc/userbar.jsp" />
-    <put-attribute name="footer" value="/WEB-INF/views/inc/footer.jsp" />
+  <definition name="root.*" extends="baseResources">
+    <put-attribute name="title" value="Home" />
+    <put-attribute name="body" value="/WEB-INF/views/{1}.jsp" />
+  </definition>
+  
+  <definition name="festival.*" extends="baseResources">
+    <put-attribute name="title" value="Festival" />
+    <put-attribute name="body" value="/WEB-INF/views/festival/{1}.jsp" />
   </definition>
 
-  <definition name="error.*" template="/WEB-INF/views/inc/layout.jsp">
-    <put-attribute name="title" value="Store Bro" />
-    <put-attribute name="header" value="/WEB-INF/views/inc/header.jsp" />
+  <definition name="error.*" extends="baseResources">
+    <put-attribute name="title" value="Error" />
     <put-attribute name="body" value="/WEB-INF/views/error/{1}.jsp" />
-    <put-attribute name="userbar" value="/WEB-INF/views/inc/userbar.jsp" />
-    <put-attribute name="footer" value="/WEB-INF/views/inc/footer.jsp" />
   </definition>
   
 </tiles-definitions>
