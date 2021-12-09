@@ -8,18 +8,22 @@ let choose = '';
 const theme = {
     card: {
         render: (
-            {홈페이지주소 = '#',
-            관련정보 = 'No info',
-            축제이름 = 'No Title',
-            내용 = 'No Contents',
-            시작일 = '-',
-            종료일 = '-',
-            도로명주소 = '-',
-            전화번호 = '000-0000-0000'}
+            {
+				축제번호,
+				홈페이지주소 = '#',
+	            관련정보 = '공개된 정보가 아직 없습니다.',
+	            축제이름 = 'No Title',
+	            내용 = 'No Contents',
+	            시작일 = '-',
+	            종료일 = '-',
+	            도로명주소 = '-',
+	            전화번호 = '제공되는 번호가 없습니다.',
+            }
         ) => {
+			console.log(축제이름)
             return `
-                <div class="card">
-                    <div class="card-title"><span>${축제이름}</span> <span class="tag text-muted">${관련정보}</span> </div>
+                <div class="card p-5" fest-id="${축제번호}">
+                    <div class="card-title"><span class="h3">${축제이름.replace(/[\&\;a-z]+/gm,'')}</span> <span class="tag text-muted">${관련정보}</span> </div>
                     <a class="card-content">
                         <div class="card-body">
                             <p class="tag"></p>
@@ -43,6 +47,7 @@ const theme = {
     simple: {
         render: (
             {
+				축제번호,
                 홈페이지주소 = '#',
                 축제이름 = 'No Title',
                 도로명주소 = 'No Address',
@@ -50,18 +55,24 @@ const theme = {
                 내용,
             }
         )=>{
+			let tagLists = 내용.replace(/\([\s\S]+?\)|[0-9\,]+곳|[0-9\,]+기|옛|[0-9\,]+보|[0-9\,]+인|넘치는|따른|따르는|[0-9\,]+개|[ㄱ-힣]+하고\s|[ㄱ-힣]+하는\s|[^ㄱ-힣]+에\s|[[^놀]ㄱ-힣]+이\s|[ㄱ-힣]+가[^요제]|[ㄱ-힣]+로\s|[ㄱ-힣]+로한\s|다양한|활용한|[ㄱ-힣]+의\s|\s등|[^유]등$/gm, '').split(/[\s]|\·|\+|\_|\,|외|것|과|와|을|를|및|○|\/|\:|\&|\./gm).filter(item=>item!='' && item!=' ' && item!='가').map(item=>`<span class="tag tag-brand">${item}</span>`);
+			let tags = tagLists.splice(0, 10).join(' ');
+			let restLists = tagLists.length;
+			
             return `
-                <div class="card w-flex justify-content-center align-items-center flex-grow-0 position-relative" style="height: 22rem;background-color: rgb(${parseInt(Math.random()*256)},${parseInt(Math.random()*256)},${parseInt(Math.random()*256)});">
+                <div class="card w-flex flex-column justify-content-center align-items-center flex-grow-0 position-relative" style="height: 22rem;background-color: rgba(${parseInt(Math.random()*256)},${parseInt(Math.random()*256)},${parseInt(Math.random()*256)}, .3);">
+                	<div class="position-absolute top-0 end-0 mt-2 me-2"><button class="px-2 btn btn-info" fest-id=${축제번호}><i class="far fa-bookmark"></i></button></div>
                     <div class="shape-${parseInt(Math.random()*5)+1} position-absolute top-50 start-50 position-middle" style="height: 14rem; width: 14rem;"></div>
                     <div class="w-flex flex-column justify-content-center align-items-center" style="width:15rem; z-index: 10;">
-                        <div class="card-title">${축제이름}</div>
+                        <div class="card-title">${축제이름.replace(/[\&\;a-z]+/gm,'')}</div>
                             <a class="card-content">
                             <div class="card-body">
                                 <p class="my-1">${도로명주소!=''?도로명주소:지번주소}</p>
                             </div>
-                            <a href="/fest/num" class="tag tag-info text-white">Detail</a>
+                            <a href="/fest/detail/${축제번호}" class="tag tag-info text-white">Detail</a>
                             <a href="${홈페이지주소}" class="tag tag-danger text-white">Link</a>
                         </div>
+                        <div>${tags}${restLists>0?` <span class="tag tag-warning">more ${restLists} tag${restLists==1?'':'s'}</span>`:''}</div>
                     </div>
                 </div>
             `;
@@ -123,20 +134,20 @@ function fetchData(url) {
         resultData(data);
     });
     
-    async function getDatas(total){
-        if(!iss){
-            iss = true;
-            fetchData(thisUrl(await total.textContent));
+    function getDatas(total){
+        if(iss == false) {
+            fetchData(thisUrl(total.textContent));
+			iss = true;
         }
     }
 
-    async function resultData(data){
+    function resultData(data){
         let allData = new DOMParser().parseFromString(data, 'application/xml');
         window.festInfo = new TotalData(allData);
         festInfo.total = parseInt(allData.querySelector('totalCount').textContent);
         loading?loading.parentNode.remove():null;
     }
-    
+
 }
 
 let count = 0;
@@ -157,20 +168,21 @@ function requestData(){
 
 function TotalData(all) { // 모든 축제 데이터
     this.festivals = [];
-    all.querySelectorAll('item').forEach(item=>{
-        this.festivals.push(new festival(item));
+    all.querySelectorAll('item').forEach((item, idx)=>{
+        this.festivals.push(new festival(item, idx));
     });
 }
 
-function festival(item){
+function festival(item, idx){
 	
     function validate(type){
         let target = item.querySelector(type);
-        let content = target?target.textContent:'';
-        if(target) return content=='없음'?'':content;
-        else return '';
+        let content = target?target.textContent:undefined;
+        if(target) return content=='없음'?undefined:content;
+        else return undefined;
     }
     
+    this.축제번호 = idx;
     this.축제이름 = validate('fstvlNm');
     this.축제장소 = validate('opar');
     this.내용 = validate('fstvlCo');

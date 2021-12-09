@@ -24,25 +24,9 @@ public class HomeController {
 	}
 
 	@GetMapping("/nowadays")
-	public String nowadays() {
+	public String nowadays(String festinfo) {
 		return "festival.nowadays";
 	}
-
-	@GetMapping("/region")
-	public String region() {
-		return "festival.region";
-	}
-	
-	@GetMapping("/monthly")
-	public String monthly() {
-		return "festival.monthly";
-	}
-	
-	@GetMapping("/season")
-	public String season() {
-		return "festival.season";
-	}
-	
 	
 	@GetMapping("error/notFound")
 	public String error() {

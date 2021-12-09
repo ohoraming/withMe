@@ -13,7 +13,14 @@ const Withme = (function () {
             this.createContents();
 
             window.addEventListener('change', this.dateHandler);
+            window.addEventListener('click', this.addScrap);
         }
+        
+        this.addScrap = function(ev){
+			let target = ev.target;
+			if(target.tagName !== 'BUTTON' || !target.getAttribute('fest-id'))return;
+			models.addScrap(target);
+		}
 
         this.dateHandler = function (ev) {
             let target = ev.target;
@@ -42,6 +49,21 @@ const Withme = (function () {
         this.init = function (view) {
             views = view;
         }
+        
+        this.addScrap = function(target){
+			const id = target.getAttribute('fest-id');
+			fetch('/api/type/scrap/'+id)
+			.then(response=>response.json())
+			.then(data=>{
+				console.log(data);
+			});
+			target.classList.toggle('pick');
+			if(target.classList.contains('pick')){
+				target.innerHTML = '<i class="fas fa-bookmark text-danger"></i>';
+			} else {
+				target.innerHTML = '<i class="far fa-bookmark"></i>';				
+			}
+		}
 
         this.createContents = function (box) {
             views.createContents(box);

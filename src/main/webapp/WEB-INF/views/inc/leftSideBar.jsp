@@ -8,31 +8,9 @@
             </div>
             <ul class="list-group">
                 <li class="list-item">
-                    <a href="/nowadays">
+                    <a href="/">
                         <i class="far fa-grin-stars"></i>
                         <span>이번 달 축제</span>
-                    </a>
-                </li>
-                <li class="list-item">
-                    <a href="/region">
-                        <i class="fas fa-globe"></i>
-                        <span>지역별 축제</span>
-                    </a>
-                </li>
-                <li class="list-item">
-                    <a href="/monthly">
-                        <i class="far fa-calendar-check"></i>
-                        <span>월별 축제</span>
-                    </a>
-                </li>
-                <li class="list-item">
-                    <a href="/season">
-                        <span class="position-relative">
-                            <i class="far fa-sun position-relative" style="top: -.2em"></i>
-                            <i class="fas fa-snowflake position-absolute"
-                                style="left: 0.4em; top: .2em; backdrop-filter: drop-shadow(0 0 3px white)"></i>
-                        </span>
-                        <span>계절별 축제</span>
                     </a>
                 </li>
                 <li class="list-item">
