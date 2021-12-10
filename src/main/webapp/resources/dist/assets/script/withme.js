@@ -55,7 +55,7 @@ const Withme = (function () {
 			fetch('/api/type/scrap/'+id)
 			.then(response=>response.json())
 			.then(data=>{
-				console.log(data);
+//				console.log(data);
 			});
 			target.classList.toggle('pick');
 			if(target.classList.contains('pick')){
@@ -90,7 +90,10 @@ const Withme = (function () {
         this.updateDate = function (type) {
             if (type != 'day') {
                 let lastDate = new Date(year.value, parseInt(month.value) + 1, 0);
-                console.log(lastDate.getDate())
+                day.innerHTML = '';
+                for(let i=0; i<lastDate.getDate(); i++){
+					day.innerHTML += `<option value="${i+1}">${i+1}</option>`;
+				}
             }
         }
 
@@ -140,6 +143,8 @@ const Withme = (function () {
                     nodes.pages[key]
                 ));
             }
+            
+            document.querySelector('.recommend-categories').innerHTML = `<span class="tag tag-warning">지역을 선택하시면 선택지가 나옵니다.</span>`;
         }
     }
 

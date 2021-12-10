@@ -36,3 +36,29 @@
 .loadResources{
     margin-top: 5em;
 }
+
+.recommend-categories{
+	resize: vertical;
+	max-height: 120px;
+	overflow-y: auto;
+	padding: 1em;
+	box-shadow: 0 0 1em 0 rgba(var(--pl-gray-rgb), .2);
+	border-radius: 1em;
+}
+
+.recommend-categories::-webkit-scrollbar{
+	background-color: transparent;
+}
+
+::-webkit-resizer {
+/*     border: 2px solid yellow; */
+    background: rgba(var(--pl-brand-rgb),1);
+/*     box-shadow: 0 0 2px 5px red; */
+/*     outline: 2px dashed green; */
+	border-radius: 50%;
+
+    /*size does not work*/  
+    display: block;
+    width: 50px !important;
+    height: 50px !important;
+}

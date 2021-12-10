@@ -3,7 +3,11 @@ Array.prototype.insertInto = function (insertInto = 0, ...args) {
     return this;
 }
 
+const replaceRegex = new RegExp(/\([\s\S]+?\)|[0-9\,]+곳|[0-9\,]+기|[0-9\(\)ㄱ-힣]+부터|[0-9\(\)ㄱ-힣]+까지|옛|[0-9\,]+보|[0-9\,]+인|넘치는|따른|따르는|[0-9\,]+개|[ㄱ-힣]+하고\s|[ㄱ-힣]+되며\s|[ㄱ-힣]+하다\s|[ㄱ-힣]+는\s|[ㄱ-힣]+하는\s|[ㄱ-힣]+한\s|[ㄱ-힣]+에\s|에서|에게|[ㄱ-힣]+하여\s|하게|[[^놀]ㄱ-힣]+이\s|[ㄱ-힣]+가[^요제]|[ㄱ-힣]+로\s|있고|[ㄱ-힣]+로한\s|다양한|활용한|[ㄱ-힣]+의\s|\s등|[\s\S[^유]]+?등$|\“[\s\S]+?\”|\&[\s\S]+?\;|ㅇ/,'gm');
+const splitRegex = new RegExp(/[\s]|\·|\+|\_|\,|외|것|과|와|을|를|및|○|\/|\:|\&|\./, 'gm');
 let choose = '';
+let filteredFest = [];
+let withFestSearch = false;
 
 const theme = {
     card: {
@@ -53,9 +57,11 @@ const theme = {
                 도로명주소 = 'No Address',
                 지번주소 = 'No Address',
                 내용,
+                시작일,
+                종료일,
             }
         )=>{
-			let tagLists = 내용.replace(/\([\s\S]+?\)|[0-9\,]+곳|[0-9\,]+기|옛|[0-9\,]+보|[0-9\,]+인|넘치는|따른|따르는|[0-9\,]+개|[ㄱ-힣]+하고\s|[ㄱ-힣]+하는\s|[^ㄱ-힣]+에\s|[[^놀]ㄱ-힣]+이\s|[ㄱ-힣]+가[^요제]|[ㄱ-힣]+로\s|[ㄱ-힣]+로한\s|다양한|활용한|[ㄱ-힣]+의\s|\s등|[^유]등$/gm, '').split(/[\s]|\·|\+|\_|\,|외|것|과|와|을|를|및|○|\/|\:|\&|\./gm).filter(item=>item!='' && item!=' ' && item!='가').map(item=>`<span class="tag tag-brand">${item}</span>`);
+			let tagLists = [...new Set(내용.replace(replaceRegex, '').split(splitRegex).filter(item=>item!='' && item!=' ' && item!='가' && item!='등' && item!='온' && item!='첫' && item!='즐길' && item!='수' && item!='된' && item!='사' && item!='한').sort())].map(item=>`<span class="tag tag-brand">${item}</span>`);
 			let tags = tagLists.splice(0, 10).join(' ');
 			let restLists = tagLists.length;
 			
@@ -69,8 +75,14 @@ const theme = {
                             <div class="card-body">
                                 <p class="my-1">${도로명주소!=''?도로명주소:지번주소}</p>
                             </div>
-                            <a href="/fest/detail/${축제번호}" class="tag tag-info text-white">Detail</a>
-                            <a href="${홈페이지주소}" class="tag tag-danger text-white">Link</a>
+                            <div>
+                            	<a href="/fest/detail/${축제번호}" class="tag tag-info text-white">Detail</a>
+                            	<a href="${홈페이지주소}" class="tag tag-danger text-white">Link</a>
+                            </div>
+                            <div>
+                            	<span>${시작일}</span> ~ 
+                            	<span>${종료일}</span>
+                            </div>
                         </div>
                         <div>${tags}${restLists>0?` <span class="tag tag-warning">more ${restLists} tag${restLists==1?'':'s'}</span>`:''}</div>
                     </div>
@@ -224,31 +236,92 @@ function TotalFestivalNum({response}) { // 등록된 축제 데이터의 수
 
 if(inputText) inputText.addEventListener('keyup', searchHandlar);
 
+window.addEventListener('click', handleRadioSearch);
+window.addEventListener('click', handleWithFestSearch);
+
+function handleWithFestSearch(ev){
+	let target = ev.target;
+	if(target.tagName !== 'INPUT' || target.name !== 'withFestSearch') return;
+	if(target.checked) withFestSearch = true;
+	else withFestSearch = false;
+	console.log(target.checked);
+}
+
+function handleRadioSearch(ev){
+	const target = ev.target;
+	if(!target.attributes['radio-search'])return;
+	
+	const searchText = target.textContent.trim();
+	
+	let resultFest = filteredFest.filter(fest=>{
+		if(fest.내용.indexOf(searchText)>-1){
+			return fest;
+		}
+	});
+	result.innerHTML = '';
+	
+	resultFest.forEach(fest=>{
+    	result.innerHTML += withmeCard.type('simple').render(fest);
+	});
+	
+	console.log(resultFest)
+	if(resultFest.length==0){
+		result.innerHTML = 
+        `<p>일치하는 결과가 없습니다.</p>`;
+	}
+	
+	randomRecommend();
+}
+
+function randomRecommend(){
+	let random = [];
+	for(let i=0; i<3; i++){
+		let rand = festInfo.festivals[parseInt(Math.random()*festInfo.festivals.length)];
+		if(!random.includes(rand)){			
+			random.push(rand);
+		} else {
+			i--;
+		}
+	}
+	
+	document.querySelector('.favorite-local').innerHTML = `${random.map(({도로명주소, 축제이름, 지번주소, 내용})=>{
+		return `<span class="tag tag-info fs-8">${지번주소?지번주소.split(' ').shift():도로명주소.split(' ').shift()} - ${축제이름}</span>`;
+	}).join(' ')}`;
+}
+
 function searchHandlar(ev){
     let value = ev.target.value; // 입력한 검색어
     let keyCode = ev.key; // 키 코드 code -> key
 
     if(keyCode == 'Enter') { // 검색어 입력 후 enter
         result.innerHTML = '';
-        let idx = 0;
-
-        festInfo.festivals.forEach((fest)=>{
-            // 축제이름, 축제장소, 도로명주소에서 입력값 검색
-            if(fest.축제이름.indexOf(value) != -1 || 
-                fest.축제장소.indexOf(value) != -1 ||
-                fest.도로명주소.indexOf(value) != -1 ||
-                fest.내용.indexOf(value) != -1 ||
-                fest.관련정보.indexOf(value) != -1) 
-            {
-                idx++; // 검색어와 일치하는 축제 수
-                result.innerHTML += withmeCard.type('simple').render(fest);
-            }
-        });
-        if(idx == 0) {
+        filteredFest = festInfo.festivals.filter((fest)=>fest.축제이름.indexOf(value) != -1 || 
+            fest.축제장소.indexOf(value) != -1 ||
+            (fest.도로명주소!=undefined && fest.도로명주소.indexOf(value) != -1) ||
+            fest.내용.indexOf(value) != -1 ||
+            (fest.관련정보!=undefined && fest.관련정보.indexOf(value) != -1));
+        
+        filteredFest.forEach(fest=>{
+        	result.innerHTML += withmeCard.type('simple').render(fest);
+		});
+		
+        if(filteredFest.length == 0) {
+			filteredFest = [];
             result.innerHTML = 
             `<p>일치하는 결과가 없습니다.</p>`;
-        }
+		    document.querySelector('.recommend-categories').innerHTML = '<span class="tag tag-warning">검색된 내용이 없습니다.</span>';
+        } else {
+			let removeDup = [];
+			
+			filteredFest.forEach(fest=>{
+				removeDup.push(...fest.내용.replace(replaceRegex, '').split(splitRegex).filter(item=>item!='' && item!=' ' && item!='가' && item!='등' && item!='온' && item!='첫' && item!='즐길' && item!='수' && item!='된' && item!='사' && item!='한'));
+			});
+			
+			document.querySelector('.recommend-categories').innerHTML = [...new Set(removeDup.sort())].map(s=>`<span class="tag tag-brand" radio-search="${s}">${s}</span>`).join(' ');
+		}
     }
+    
+    randomRecommend();
 }
 
 let year = document.getElementById('year');
@@ -272,13 +345,30 @@ function yearHandlar(ev){
     let festEndMonth = (month)=>parseInt(month.종료일.split('-')[1]);
     let festStartDay = (day)=>parseInt(day.시작일.split('-').pop());
     let festEndDay = (day)=>parseInt(day.종료일.split('-').pop());
+    
+    let resultFest = null;
+    
+    if(!withFestSearch) filteredFest = festInfo.festivals;
+    else filteredFest = filteredFest.length==0?festInfo.festivals:filteredFest;
 
-    let resultArray = 
-    festInfo.festivals
+    resultFest = 
+    filteredFest
     .filter(year=>festStartYear(year)<=parseInt(yvalue)&&festEndYear(year)>=parseInt(yvalue))
-    .filter(month=>festStartMonth(month)<=parseInt(mvalue)&&festEndMonth(month)>=parseInt(mvalue))
+    .filter(month=>festStartMonth(month)<=parseInt(mvalue)+1&&festEndMonth(month)>=parseInt(mvalue)+1)
     .filter(day=>festStartDay(day)<=parseInt(dvalue)&&festEndDay(day)>=parseInt(dvalue));
 
-    resultArray.length==0?result.innerHTML = 
-    `<p>일치하는 결과가 없습니다.</p>`:resultArray.forEach(fest=> result.innerHTML += withmeCard.type('simple').render(fest));
+	let removeDup = [];
+			
+	resultFest.forEach(fest=>{
+		removeDup.push(...fest.내용.replace(replaceRegex, '').split(splitRegex).filter(item=>item!='' && item!=' ' && item!='가' && item!='등' && item!='온' && item!='첫' && item!='즐길' && item!='수' && item!='된' && item!='사' && item!='한'));
+	});
+	
+	document.querySelector('.recommend-categories').innerHTML = [...new Set(removeDup.sort())].map(s=>`<span class="tag tag-brand" radio-search="${s}">${s}</span>`).join(' ');
+	
+	resultFest.length==0?document.querySelector('.recommend-categories').innerHTML = '<span class="tag tag-warning">검색된 내용이 없습니다.</span>':null;
+	
+    resultFest.length==0?result.innerHTML = 
+    `<p>일치하는 결과가 없습니다.</p>`:resultFest.forEach(fest=> result.innerHTML += withmeCard.type('simple').render(fest));
+    
+    randomRecommend();
 }

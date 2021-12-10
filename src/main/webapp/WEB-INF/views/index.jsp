@@ -9,18 +9,23 @@
             data-msg="이번 달 축제를 소개합니다.">
             ?
         </span>
-        <div class="w-flex align-items-center justify-content-between mt-3">
+        <div class="w-flex align-items-center justify-content-between mt-3" style="gap: 5em;">
             <div class="col">
-                <label for="inputText">지역/축제 이름</label>
+                <label for="inputText">지역/축제 검색</label>
                 <input type="text" id="inputText" class="form-input form-input-lg col">
+                <div class="favorite-local mt-2"></div>
+                <div class="w-flex align-items-center justify-content-between mt-3">
+		            <div class="btn-bundle">
+					    <select id="year" class="form-select form-select-lg"></select>
+					    <select id="month" class="form-select form-select-lg"></select>
+					    <select id="day" class="form-select form-select-lg"></select>
+					</div>
+		        </div>
+		        <div><input type="checkbox" name="withFestSearch">지역 & 월별 조건 합치기</div>
             </div>
-        </div>
-        <div class="w-flex align-items-center justify-content-between mt-3">
-            <div class="btn-bundle">
-			    <select id="year" class="form-select form-select-lg"></select>
-			    <select id="month" class="form-select form-select-lg"></select>
-			    <select id="day" class="form-select form-select-lg"></select>
-			</div>
+            <div class="col recommend-categories">
+            	
+            </div>
         </div>
     </div>
     <hr>

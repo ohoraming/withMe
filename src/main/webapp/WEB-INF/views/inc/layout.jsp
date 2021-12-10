@@ -22,7 +22,7 @@
 	
 	<div class="main">
 		<!-- leftSideBar -->
-		<tiles:insertAttribute name="leftSideBar" ignore="true"/>
+<%-- 		<tiles:insertAttribute name="leftSideBar" ignore="true"/> --%>
 		<!-- leftSideBar -->
 		<main>
 			<!-- body -->
@@ -30,7 +30,7 @@
 			<!-- body -->
 	    </main>
 	    <!-- leftSideBar -->
-		<tiles:insertAttribute name="rightSideBar" ignore="true"/>
+<%-- 		<tiles:insertAttribute name="rightSideBar" ignore="true"/> --%>
 		<!-- leftSideBar -->
 	</div>
 	
